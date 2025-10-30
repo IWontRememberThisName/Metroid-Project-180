@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using TMPro;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -11,17 +12,21 @@ using UnityEngine.SceneManagement;
 public class PlayerControllerM : MonoBehaviour
 {
     // Declaring functions.
-    public float jumpforce = 8f;
     private Rigidbody RB;
-    public int speed = 40;
-    public int points = 0;
-    public int RegularCoins = 10;
-    public int lives = 4;
-    private Vector3 respawnPos;
+
+    public float jumpforce = 8f;
     public float deathheight = -3f;
-    public Vector3 direction;
     public float tempspeed = 0;
     public float stuntimer = 4;
+    public int speed = 40;
+    public int RegularCoins = 10;
+    public int health = 99;
+    public int damageStateDuration = 5;
+
+    private Vector3 respawnPos;
+    public Vector3 direction;
+
+    public TMP_Text healthText;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,20 +39,21 @@ public class PlayerControllerM : MonoBehaviour
     void Update()
     {
         Movement();
-        SpaceJump();
+        Jump();
         CheckForFallDeath();
+        healthText.text = "HP: " + health;
     }
     //private void
     private void CheckForFallDeath()
     {
         if (transform.position.y < deathheight)
         {
-            respawn();
+            Respawn();
         }
     }
-    private void SpaceJump()
+    private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             RaycastHit hit;
 
@@ -81,20 +87,13 @@ public class PlayerControllerM : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Triggered by: " + other.gameObject.name);
-
-        if (other.CompareTag("CoinR"))
-        {
-            points += RegularCoins;
-            Destroy(other.gameObject);
-        }
-
         if (other.CompareTag("Lazer"))
         {
             StartCoroutine(Stun());
         }
         if (other.CompareTag("Bullet"))
         {
-            respawn();
+            Respawn();
         }
         IEnumerator Stun()
         {
@@ -112,14 +111,18 @@ public class PlayerControllerM : MonoBehaviour
             Debug.Log("Stun ended. Speed restored to " + speed);
         }
     }
-    public void respawn()
+    public void Respawn()
     {
-        transform.position = respawnPos;
-        lives--;
-        if (lives <= 0)
+        health--;
+        if (health <= 0)
         {
             Debug.Log("GameOver");
             SceneManager.LoadScene(2);
         }
+    }
+
+    private IEnumerator DamageState()
+    {
+        yield return new WaitForSeconds(damageStateDuration);
     }
 }
