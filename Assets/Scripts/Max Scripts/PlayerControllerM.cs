@@ -7,7 +7,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 /// <summary>
-/// Max Slavik, 10/20/25, Project plays with player movement usingthings like delta time and raycasting for jumping actions.
+/// Max Slavik, 10/20/25, Project plays with player movement using things like delta time and raycasting for jumping actions.
 /// </summary>
 public class PlayerControllerM : MonoBehaviour
 {
@@ -18,6 +18,7 @@ public class PlayerControllerM : MonoBehaviour
     public float deathheight = -3f;
     public float tempspeed = 0;
     public float stuntimer = 4;
+    public float flashDuration = 0.1f;
     public int speed = 40;
     public int RegularCoins = 10;
     public int health = 99;
@@ -29,6 +30,16 @@ public class PlayerControllerM : MonoBehaviour
 
     public TMP_Text healthText;
 
+    public Quaternion facingLeft = Quaternion.Euler(0f, 180f, 0f);
+    public Quaternion facingRight = Quaternion.Euler(0f, 0f, 0f);
+
+    public Renderer rend;
+
+    public Color flashColor = Color.red;
+    public Color originalColor;
+
+
+
     
     // Start is called before the first frame update
     void Start()
@@ -36,6 +47,7 @@ public class PlayerControllerM : MonoBehaviour
         RB = GetComponent<Rigidbody>();
         respawnPos = transform.position;
         RB.freezeRotation = true;
+        originalColor = rend.material.color;
     }
 
     // Update is called once per frame
@@ -45,6 +57,7 @@ public class PlayerControllerM : MonoBehaviour
         Jump();
         CheckForFallDeath();
         healthText.text = "HP: " + health;
+        //CheckDamageState();
     }
     //private void
     private void CheckForFallDeath()
@@ -73,18 +86,23 @@ public class PlayerControllerM : MonoBehaviour
     }
     private void Movement()
     {
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.A))
         {
             direction = Vector3.left;
             //transform.position += Vector3.left * speed * Time.deltaTime;
             RB.MovePosition(transform.position + direction * speed * Time.deltaTime);
+
+            //sets rotation to a fixed value
+            transform.rotation = facingLeft;
         }
 
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             direction = Vector3.right;
             RB.MovePosition(transform.position + direction * speed * Time.deltaTime);
             //transform.position += Vector3.right * speed * Time.deltaTime;
+
+            transform.rotation = facingRight;
         }
     }
     /*private void OnTriggerEnter(Collider other)
@@ -126,6 +144,15 @@ public class PlayerControllerM : MonoBehaviour
         }
         isDamaged = true;
         StartCoroutine(DamageState());
+        print("this is after the coroutine");
+    }
+
+    public void CheckDamageState()
+    {
+        while (isDamaged)
+        {
+            StartCoroutine(Flash());
+        }
     }
 
     private IEnumerator DamageState()
@@ -134,4 +161,12 @@ public class PlayerControllerM : MonoBehaviour
         print("Invincibility Mode");
         isDamaged = false;
     }
+
+    private IEnumerator Flash()
+    {
+        rend.material.color = flashColor;
+        yield return new WaitForSeconds(flashDuration);
+        rend.material.color = originalColor;
+    }
+
 }

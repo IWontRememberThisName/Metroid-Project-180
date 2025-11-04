@@ -8,11 +8,13 @@ using UnityEngine;
  */
 public class GunScript : MonoBehaviour
 {
-    public bool goingLeft;
+    private bool goingLeft = true;
     public bool cooldown = false;
     public float cooldownTime = 2f;
     //Variable storing the bullet prefab
     public GameObject projectilePrefab;
+    //Variable storing the player
+    public GameObject player;
 
 
     // Update is called once per frame
@@ -32,7 +34,6 @@ public class GunScript : MonoBehaviour
             cooldown = true;
             StartCoroutine(Recharge());
         }
-        
     }
 
     /// <summary>
@@ -44,7 +45,17 @@ public class GunScript : MonoBehaviour
 
         if (projectile.GetComponent<BulletM>())
         {
-            projectile.GetComponent<BulletM>().goingleft = goingLeft;
+            //if the player is facing left the bullet fired will move to the left
+            if(player.transform.rotation == player.GetComponent<PlayerControllerM>().facingLeft)
+            {
+                projectile.GetComponent<BulletM>().goingleft = goingLeft;
+            }
+            //if the player is facing right the bullet fired will move to the right
+            else if(player.transform.rotation == player.GetComponent<PlayerControllerM>().facingRight)
+            {
+                projectile.GetComponent<BulletM>().goingleft = !goingLeft;
+            }
+            
         }
 
     }

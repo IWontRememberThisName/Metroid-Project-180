@@ -45,7 +45,7 @@ public class EnemyM : MonoBehaviour
     public void DamageH()
     {
         Health--;
-        if (Health < 0)
+        if (Health <= 0)
         {
             Destroy(gameObject);
         }
@@ -53,7 +53,7 @@ public class EnemyM : MonoBehaviour
     public void DamageE()
     {
         Health--;
-        if (Health < 0)
+        if (Health <= 0)
         {
             Destroy(gameObject);
         }
