@@ -15,7 +15,6 @@ public class BulletM : MonoBehaviour
     {
         if (goingleft)
         {
-
             transform.position += speed * Vector3.left * Time.deltaTime;
         }
         else

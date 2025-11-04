@@ -5,7 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 /// <summary>
-/// SlavikMax, 10/21/25 codes all types of enem
+/// SlavikMax, 11/1/25 codes all types of enemies, deals with health states from bullets
 /// </summary>
 public class EnemyM : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class EnemyM : MonoBehaviour
     private Vector3 direction;
     private Vector3 startLeftPos;
     private Vector3 startRightPos;
+    public int Health = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,5 +41,21 @@ public class EnemyM : MonoBehaviour
             direction = Vector3.left;
         }
 
+    }
+    public void DamageH()
+    {
+        Health--;
+        if (Health < 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+    public void DamageE()
+    {
+        Health--;
+        if (Health < 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

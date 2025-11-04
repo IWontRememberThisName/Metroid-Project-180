@@ -8,14 +8,12 @@ using UnityEngine;
  */
 public class GunScript : MonoBehaviour
 {
+    public bool goingLeft;
+    public bool cooldown = false;
+    public float cooldownTime = 2f;
     //Variable storing the bullet prefab
     public GameObject projectilePrefab;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -23,14 +21,18 @@ public class GunScript : MonoBehaviour
         Shoot();
     }
     /// <summary>
-    /// Fires a bullet when the space bar is pressed
+    /// Fires a bullet when the space bar is pressed if the cooldown bool is false
     /// </summary>
     private void Shoot()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && cooldown == false)
         {
             SpawnProjectile();
+            //cooldown is set to true and the coroutine begins immediately after which sets it back to false
+            cooldown = true;
+            StartCoroutine(Recharge());
         }
+        
     }
 
     /// <summary>
@@ -40,5 +42,20 @@ public class GunScript : MonoBehaviour
     {
         GameObject projectile = Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
 
+        if (projectile.GetComponent<BulletM>())
+        {
+            projectile.GetComponent<BulletM>().goingleft = goingLeft;
+        }
+
+    }
+
+    /// <summary>
+    /// Coroutine that delays the cooldown flag being set to true
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Recharge()
+    {
+        yield return new WaitForSeconds(cooldownTime);
+        cooldown = false;
     }
 }

@@ -22,11 +22,14 @@ public class PlayerControllerM : MonoBehaviour
     public int RegularCoins = 10;
     public int health = 99;
     public int damageStateDuration = 5;
+    public bool isDamaged = false;
 
     private Vector3 respawnPos;
     public Vector3 direction;
 
     public TMP_Text healthText;
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -84,7 +87,7 @@ public class PlayerControllerM : MonoBehaviour
             //transform.position += Vector3.right * speed * Time.deltaTime;
         }
     }
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Triggered by: " + other.gameObject.name);
         if (other.CompareTag("Lazer"))
@@ -110,19 +113,25 @@ public class PlayerControllerM : MonoBehaviour
             speed = currentplayerspeed;
             Debug.Log("Stun ended. Speed restored to " + speed);
         }
-    }
+    }*/
+    /// <summary>
+    /// Changes scene if health is depleted and makes the player invulnerable for a short period 
+    /// </summary>
     public void Respawn()
     {
-        health--;
         if (health <= 0)
         {
             Debug.Log("GameOver");
             SceneManager.LoadScene(2);
         }
+        isDamaged = true;
+        StartCoroutine(DamageState());
     }
 
     private IEnumerator DamageState()
     {
         yield return new WaitForSeconds(damageStateDuration);
+        print("Invincibility Mode");
+        isDamaged = false;
     }
 }
