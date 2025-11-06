@@ -35,4 +35,13 @@ public class BulletH : MonoBehaviour
             transform.position += speed * Vector3.right * Time.deltaTime;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //if the bullet collides with an enemy, it will take damage
+        if (other.GetComponent<EnemyM>())
+        {
+            other.GetComponent<EnemyM>().DamageH();
+        }
+    }
 }

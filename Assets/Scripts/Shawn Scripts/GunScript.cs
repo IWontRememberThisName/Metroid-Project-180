@@ -10,9 +10,11 @@ public class GunScript : MonoBehaviour
 {
     private bool goingLeft = true;
     public bool cooldown = false;
+    public bool gunUpgrade = false;
     public float cooldownTime = 2f;
     //Variable storing the bullet prefab
-    public GameObject projectilePrefab;
+    public GameObject bulletPrefab;
+    public GameObject heavyBulletPrefab;
     //Variable storing the player
     public GameObject player;
 
@@ -41,8 +43,18 @@ public class GunScript : MonoBehaviour
     /// </summary>
     private void SpawnProjectile()
     {
-        GameObject projectile = Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
+        
+        GameObject projectile;
 
+        if (!gunUpgrade)
+        {
+            projectile = Instantiate(bulletPrefab, transform.position, bulletPrefab.transform.rotation);
+        }
+        else
+        {
+            projectile = Instantiate(heavyBulletPrefab, transform.position, heavyBulletPrefab.transform.rotation);
+        }
+        
         if (projectile.GetComponent<BulletM>())
         {
             //if the player is facing left the bullet fired will move to the left
@@ -56,6 +68,21 @@ public class GunScript : MonoBehaviour
                 projectile.GetComponent<BulletM>().goingleft = !goingLeft;
             }
             
+        }
+
+        if (projectile.GetComponent<BulletH>())
+        {
+            //if the player is facing left the bullet fired will move to the left
+            if (player.transform.rotation == player.GetComponent<PlayerControllerM>().facingLeft)
+            {
+                projectile.GetComponent<BulletH>().goingleft = goingLeft;
+            }
+            //if the player is facing right the bullet fired will move to the right
+            else if (player.transform.rotation == player.GetComponent<PlayerControllerM>().facingRight)
+            {
+                projectile.GetComponent<BulletH>().goingleft = !goingLeft;
+            }
+
         }
 
     }

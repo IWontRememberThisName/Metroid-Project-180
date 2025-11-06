@@ -7,14 +7,14 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 /// <summary>
-/// Max Slavik, 10/20/25, Project plays with player movement using things like delta time and raycasting for jumping actions.
+/// Max Slavik, Shawn Evans, 10/20/25, Project plays with player movement using things like delta time and raycasting for jumping actions.
 /// </summary>
 public class PlayerControllerM : MonoBehaviour
 {
     // Declaring functions.
     private Rigidbody RB;
 
-    public float jumpforce = 8f;
+    public float jumpForce = 8f;
     public float deathheight = -3f;
     public float tempspeed = 0;
     public float stuntimer = 4;
@@ -57,9 +57,8 @@ public class PlayerControllerM : MonoBehaviour
         Jump();
         CheckForFallDeath();
         healthText.text = "HP: " + health;
-        //CheckDamageState();
     }
-    //private void
+    
     private void CheckForFallDeath()
     {
         if (transform.position.y < deathheight)
@@ -76,7 +75,7 @@ public class PlayerControllerM : MonoBehaviour
             if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.5f))
             {
                 Debug.Log("Player touching the ground");
-                RB.AddForce(Vector3.up * jumpforce, ForceMode.Impulse);
+                RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             }
             else
             {
@@ -143,30 +142,42 @@ public class PlayerControllerM : MonoBehaviour
             SceneManager.LoadScene(2);
         }
         isDamaged = true;
+        StartCoroutine(Flash());
         StartCoroutine(DamageState());
-        print("this is after the coroutine");
     }
 
-    public void CheckDamageState()
+    /// <summary>
+    /// Increases the jump force by 10
+    /// </summary>
+    public void AddJump()
     {
-        while (isDamaged)
-        {
-            StartCoroutine(Flash());
-        }
+        jumpForce += 10;
     }
-
+    /// <summary>
+    /// A coroutine that waits for damageStateDuration before setting isDamaged to false
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator DamageState()
     {
+        //print("Invincibility Mode");
         yield return new WaitForSeconds(damageStateDuration);
-        print("Invincibility Mode");
         isDamaged = false;
     }
 
+    /// <summary>
+    /// A coroutine that swaps the player mesh color from flashColor to its original, alternating every flashDuration seconds.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Flash()
     {
-        rend.material.color = flashColor;
-        yield return new WaitForSeconds(flashDuration);
-        rend.material.color = originalColor;
+        while(isDamaged)
+        {
+            //player mesh turns red 
+            rend.material.color = flashColor;
+            yield return new WaitForSeconds(flashDuration);
+            //player mesh turns back to its original color after flashDuration seconds
+            rend.material.color = originalColor;
+            yield return new WaitForSeconds(flashDuration);
+        }
     }
-
 }
