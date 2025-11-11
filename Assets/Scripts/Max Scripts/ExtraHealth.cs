@@ -12,6 +12,7 @@ public class ExtraHealth : MonoBehaviour
         if (collision.gameObject.GetComponent<PlayerControllerM>())
         {
             collision.gameObject.GetComponent<PlayerControllerM>().ExtraHealth();
+            Destroy(gameObject);
         }
     }
 }

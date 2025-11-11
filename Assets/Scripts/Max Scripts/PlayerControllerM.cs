@@ -64,7 +64,7 @@ public class PlayerControllerM : MonoBehaviour
     {
         if (transform.position.y < deathheight)
         {
-            Respawn();
+            SceneManager.LoadScene(1);
         }
     }
     private void Jump()
@@ -140,7 +140,7 @@ public class PlayerControllerM : MonoBehaviour
         if (health <= 0)
         {
             Debug.Log("GameOver");
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(1);
         }
         isDamaged = true;
         StartCoroutine(Flash());
