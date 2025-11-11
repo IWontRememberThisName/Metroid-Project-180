@@ -24,6 +24,9 @@ public class BulletH : MonoBehaviour
         }
         Destroy(gameObject);
     }
+    /// <summary>
+    /// Handles the Transformation either left or right as a bullet is moving
+    /// </summary>
     private void Update()
     {
         if (goingleft)
@@ -35,13 +38,26 @@ public class BulletH : MonoBehaviour
             transform.position += speed * Vector3.right * Time.deltaTime;
         }
     }
-
+    /// <summary>
+    /// Handles collision with other things, always destroying the bullets
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         //if the bullet collides with an enemy, it will take damage
         if (other.GetComponent<EnemyM>())
         {
             other.GetComponent<EnemyM>().DamageH();
+            Destroy(gameObject);
+        }
+        else if (other.GetComponent<EnemyS>())
+        {
+            other.GetComponent<EnemyS>().DamageH();
+            Destroy(gameObject);
+        }
+        else if (other.GetComponent<Floor>())
+        {
+            Destroy(gameObject);
         }
     }
 }

@@ -7,7 +7,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 /// <summary>
-/// Max Slavik, Shawn Evans, 10/20/25, Project plays with player movement using things like delta time and raycasting for jumping actions.
+/// Max Slavik, Shawn Evans, 10/20/25, Project plays with player movement using things like delta time and raycasting for jumping actions. Item pick up functions are also included here.
 /// </summary>
 public class PlayerControllerM : MonoBehaviour
 {
@@ -24,6 +24,7 @@ public class PlayerControllerM : MonoBehaviour
     public int health = 99;
     public int damageStateDuration = 5;
     public bool isDamaged = false;
+    public int healthPickUp;
 
     private Vector3 respawnPos;
     public Vector3 direction;
@@ -170,7 +171,7 @@ public class PlayerControllerM : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Flash()
     {
-        while(isDamaged)
+        while (isDamaged)
         {
             //player mesh turns red 
             rend.material.color = flashColor;
@@ -179,5 +180,19 @@ public class PlayerControllerM : MonoBehaviour
             rend.material.color = originalColor;
             yield return new WaitForSeconds(flashDuration);
         }
+    }
+    /// <summary>
+    /// A funnction that gets called from the Health Pack, Adds health to the player if they get damaged.
+    /// </summary>
+    public void HealthPack()
+    {
+        health += healthPickUp;
+    }
+    /// <summary>
+    /// A funcituon that gets called from the extra health pack, sets the players health back up to full. 
+    /// </summary>
+    public void ExtraHealth()
+    {
+        health = 99;
     }
 }
