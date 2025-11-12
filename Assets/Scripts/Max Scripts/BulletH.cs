@@ -57,7 +57,15 @@ public class BulletH : MonoBehaviour
         }
         else if (other.GetComponent<Floor>())
         {
-            Destroy(gameObject);
+            if (other.gameObject.tag == "BreakableWall")
+            {
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
+        
     }
 }

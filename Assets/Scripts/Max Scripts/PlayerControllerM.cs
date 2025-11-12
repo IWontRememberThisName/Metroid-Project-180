@@ -24,7 +24,7 @@ public class PlayerControllerM : MonoBehaviour
     public int health = 99;
     public int damageStateDuration = 5;
     public bool isDamaged = false;
-    public int healthPickUp;
+    public int healthPickUp = 15;
 
     private Vector3 respawnPos;
     public Vector3 direction;
@@ -39,9 +39,9 @@ public class PlayerControllerM : MonoBehaviour
     public Color flashColor = Color.red;
     public Color originalColor;
 
-
-
     
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +58,7 @@ public class PlayerControllerM : MonoBehaviour
         Jump();
         CheckForFallDeath();
         healthText.text = "HP: " + health;
+        //CheckEnemyCount();
     }
     
     private void CheckForFallDeath()
@@ -189,10 +190,12 @@ public class PlayerControllerM : MonoBehaviour
         health += healthPickUp;
     }
     /// <summary>
-    /// A funcituon that gets called from the extra health pack, sets the players health back up to full. 
+    /// A funciton that gets called from the extra health pack, sets the players health back up to full. 
     /// </summary>
     public void ExtraHealth()
     {
-        health = 99;
+        health = 100;
     }
+
+    
 }

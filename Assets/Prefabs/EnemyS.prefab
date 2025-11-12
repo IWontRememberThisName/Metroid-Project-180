@@ -153,11 +153,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f9a5c96158a9f46905b35a3f752962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  Range: 8
   Speed: 8
-  LeftPoint: {fileID: 463524441582236613}
-  RightPoint: {fileID: 2716127428352019309}
-  Health: 5
   jumpForce: 8
+  Health: 10
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &4807037480563840812
 MonoBehaviour:
   m_ObjectHideFlags: 0
