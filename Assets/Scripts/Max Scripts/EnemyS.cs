@@ -1,63 +1,74 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
-/// <summary>
-/// Max Slavik, 11/1/25, Handles the special enemy coding, jumping patterns ect, has raycast for if the enemy sees you or not 
-/// </summary>
 
 public class EnemyS : MonoBehaviour
 {
     public Transform player;
-    public float sightRange = 8;
-    public LayerMask obsticaleMask;
-    public LayerMask playerMask; // I could just use a tag might wanna 
+    public float sightRange = 8f;
     public float Speed = 8f;
-    public Transform LeftPoint;
-    public Transform RightPoint;
-    private Vector3 direction;
-    private Vector3 startLeftPos;
-    private Vector3 startRightPos;
-    public LayerMask obstacleMask;
-    public int Health = 5;
-    private Rigidbody RB;
     public float jumpForce = 8f;
+    public int Health = 5;
 
-    private Rigidbody2D rb;
-    /// <summary>
-    /// Code starts with the player being trakce dthrough walls with raytags, these raytags are blocked by walls down below on the constant update function down below 
-    /// </summary>
+    public LayerMask obstacleMask;
+    public LayerMask playerMask;
+
+    private Rigidbody RB;
+
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        if (player == null) player = GameObject.FindGameObjectWithTag("Player").transform;
+        RB = GetComponent<Rigidbody>();
+        if (player == null)
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        // Set layer masks (if not assigned in Inspector)
+        obstacleMask = LayerMask.GetMask("Obstacle");
+        playerMask = LayerMask.GetMask("Player");
     }
 
     void Update()
     {
+        if (player == null) return;
 
-        if (player == null) return; // if player isnt found do nothing besides 
-
-        Vector2 dir = player.position - transform.position;
+        Vector3 dir = player.position - transform.position;
         float dist = dir.magnitude;
-        if (dist > sightRange) { rb.velocity = Vector2.zero; return; }// 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir.normalized, dist, obstacleMask | (1 << LayerMask.NameToLayer("Player")));
-        Debug.DrawRay(transform.position, dir.normalized * dist, Color.cyan); // draws the raycast to see where it would be.
+
+        if (dist > sightRange)
+        {
+            RB.velocity = Vector3.zero;
+            return;
+        }
+
+        int combinedMask = obstacleMask | playerMask;
+        RaycastHit hit;
+        bool hasHit = Physics.Raycast(transform.position, dir.normalized, out hit, dist, combinedMask);
+
+        Debug.DrawRay(transform.position, dir.normalized * dist, Color.cyan);
+
+        if (hasHit && hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            // Player is visible — move toward them
+            RB.velocity = dir.normalized * Speed;
+        }
+        else
+        {
+            // Wall in the way or no line of sight
+            RB.velocity = Vector3.zero;
 
 
 
-        /* if (hit.collider != null && (hit.collider.CompareTag("Player") || hit.collider.gameObject.layer == LayerMask.NameToLayer("Player")))
-         {
-             // chase
-             if (dist > stopDistance)
-                 rb.velocity = dir.normalized * speed;
+
+            /* if (hit.collider != null && (hit.collider.CompareTag("Player") || hit.collider.gameObject.layer == LayerMask.NameToLayer("Player")))
+             {
+                 // chase
+                 if (dist > stopDistance)
+                     rb.velocity = dir.normalized * speed;
+                 else
+                     rb.velocity = Vector2.zero;
+             }
              else
-                 rb.velocity = Vector2.zero;
-         }
-         else
-         {
-             rb.velocity = Vector2.zero; // blocked or nothing hit
-         }*/
+             {
+                 rb.velocity = Vector2.zero; // blocked or nothing hit
+             }*/
+        }
     }
     private void Jump()
     {

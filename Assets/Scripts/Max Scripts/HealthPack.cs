@@ -15,6 +15,7 @@ public class HealthPack : MonoBehaviour
         PlayerControllerM player = other.GetComponent<PlayerControllerM>();
         if (player != null)
         {
+            Debug.Log("Player Picked up health");
             player.HealthPack();
             Destroy(gameObject);
         }
