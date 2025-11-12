@@ -6,16 +6,17 @@ using UnityEngine;
 /// </summary>
 public class HealthPack : MonoBehaviour
 {
+
+    public int HealthPackNum =15;
     /// <summary>
     /// Code Allows the player to pick up the items and have the item effects do special things in the game, like jump or gain health. 
     /// </summary>
     /// <param name="collision"></param>
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        PlayerControllerM player = other.GetComponent<PlayerControllerM>();
-        if (player != null)
+        PlayerControllerM player = collision.gameObject.GetComponent<PlayerControllerM>(); // allows the use for calling Healthpack
+        if (player != null) // if the player colides with the healthpack
         {
-            Debug.Log("Player Picked up health");
             player.HealthPack();
             Destroy(gameObject);
         }

@@ -26,6 +26,7 @@ public class PlayerControllerM : MonoBehaviour
     public bool isDamaged = false;
     public int healthPickUp = 15;
 
+    public HealthPack HealthPackRefrence; //healthpack refrence to be assighned
     private Vector3 respawnPos;
     public Vector3 direction;
 
@@ -187,7 +188,9 @@ public class PlayerControllerM : MonoBehaviour
     /// </summary>
     public void HealthPack()
     {
-        health += healthPickUp;
+        Debug.Log("Health pack picked up");
+        health += HealthPackRefrence.HealthPackNum;
+        Debug.Log("Health Pack registered");
     }
     /// <summary>
     /// A funciton that gets called from the extra health pack, sets the players health back up to full. 
