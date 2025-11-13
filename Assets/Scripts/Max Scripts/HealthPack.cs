@@ -17,8 +17,12 @@ public class HealthPack : MonoBehaviour
         PlayerControllerM player = collision.gameObject.GetComponent<PlayerControllerM>(); // allows the use for calling Healthpack
         if (player != null) // if the player colides with the healthpack
         {
-            player.HealthPack();
+            if((player.health > 99 && player.maxHealthIncreased == false) || (player.health > 100 && player.maxHealthIncreased == true))
+            {
+                player.HealthPack();
+            }
             Destroy(gameObject);
+
         }
     }
 }

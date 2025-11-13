@@ -26,6 +26,7 @@ public class PlayerControllerM : MonoBehaviour
     public bool isDamaged = false;
     public int healthPickUp = 15;
     public int finalEnemyCount;
+    public bool maxHealthIncreased = false;
 
     public HealthPack HealthPackRefrence; //healthpack refrence to be assigned
     private Vector3 respawnPos;
@@ -192,6 +193,15 @@ public class PlayerControllerM : MonoBehaviour
         Debug.Log("Health pack picked up");
         health += HealthPackRefrence.HealthPackNum;
         Debug.Log("Health Pack registered");
+        if(health > 99 && !maxHealthIncreased)
+        {
+            health = 99;
+        }
+        else if(health > 99 && maxHealthIncreased)
+        {
+            health = 100;
+        }
+
     }
     /// <summary>
     /// A funciton that gets called from the extra health pack, sets the players health back up to full. 
@@ -199,6 +209,7 @@ public class PlayerControllerM : MonoBehaviour
     public void ExtraHealth()
     {
         health = 100;
+        maxHealthIncreased = true;
     }
 
     public void IncreaseFinalCounter()
