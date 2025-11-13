@@ -121,6 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   goingleft: 0
+  player: {fileID: 315053390254844655, guid: ff879b9ce8da4f840a5770a0f06171e5, type: 3}
 --- !u!54 &-4880439948417324577
 Rigidbody:
   m_ObjectHideFlags: 0

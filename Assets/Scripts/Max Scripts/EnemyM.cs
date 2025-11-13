@@ -16,6 +16,8 @@ public class EnemyM : MonoBehaviour
     private Vector3 startLeftPos;
     private Vector3 startRightPos;
     public int Health = 1;
+
+    public PlayerControllerM player;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +49,10 @@ public class EnemyM : MonoBehaviour
         Health -= 3;
         if (Health <= 0)
         {
+            if(gameObject.tag == "FinalEnemy")
+            {
+                player.IncreaseFinalCounter();
+            }
             Destroy(gameObject);
         }
     }

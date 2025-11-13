@@ -7,6 +7,7 @@ public class EnemyS : MonoBehaviour
     public float Speed = 8f;
     public float jumpForce = 8f;
     public int Health = 5;
+    public PlayerControllerM playerController;
 
     public LayerMask obstacleMask;
     public LayerMask playerMask;
@@ -63,6 +64,10 @@ public class EnemyS : MonoBehaviour
         Health -= 3;
         if (Health <= 0)
         {
+            if(gameObject.tag == "FinalEnemy")
+            {
+                playerController.IncreaseFinalCounter();
+            }
             Destroy(gameObject);
         }
     }

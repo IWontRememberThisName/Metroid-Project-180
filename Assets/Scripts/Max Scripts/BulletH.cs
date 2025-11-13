@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 /// <summary>
 /// Max Slavik 11/1/25, Designed for heavy bullets to hit an bad guy
 /// </summary>
@@ -6,6 +7,7 @@ public class BulletH : MonoBehaviour
 {
     public float speed;
     public bool goingleft;
+
     // Triggered automatically when this object collides with another collider
     private void OnCollisionEnter(Collision collision)
     {

@@ -25,8 +25,9 @@ public class PlayerControllerM : MonoBehaviour
     public int damageStateDuration = 5;
     public bool isDamaged = false;
     public int healthPickUp = 15;
+    public int finalEnemyCount;
 
-    public HealthPack HealthPackRefrence; //healthpack refrence to be assighned
+    public HealthPack HealthPackRefrence; //healthpack refrence to be assigned
     private Vector3 respawnPos;
     public Vector3 direction;
 
@@ -59,7 +60,7 @@ public class PlayerControllerM : MonoBehaviour
         Jump();
         CheckForFallDeath();
         healthText.text = "HP: " + health;
-        //CheckEnemyCount();
+        CheckFinalEnemyCount();
     }
     
     private void CheckForFallDeath()
@@ -200,5 +201,18 @@ public class PlayerControllerM : MonoBehaviour
         health = 100;
     }
 
-    
+    public void IncreaseFinalCounter()
+    {
+        
+        finalEnemyCount += 1;
+        print("The function was called");
+    }
+
+    public void CheckFinalEnemyCount()
+    {
+        if(finalEnemyCount >= 5)
+        {
+            SceneManager.LoadScene(3);
+        }
+    }
 }
